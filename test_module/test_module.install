@@ -1,0 +1,100 @@
+<?php
+/**
+ * Implement hook_schema()
+ */
+
+ function test_module_schema() {
+
+    $schema['test_student'] = array(
+        'description' => 'Data of Test Form',
+        'fields' => array(
+            'vid' => array(
+                'type' => 'serial',
+                'not null' => TRUE,
+                'description' => 'Primary Key',
+            ),
+            'lastname' => array(
+                'type' => 'varchar',
+                'not null' => TRUE,
+                'length' => 100,
+                'default' => '',
+            ),
+            'name' => array(
+                'type' => 'varchar',
+                'not null' => TRUE,
+                'length' => 100,
+                'default' => '',
+            ),
+            'documentType' => array(
+                'type' => 'varchar',
+                'not null' => TRUE,
+                'length' => 50,
+                'default' => '',
+            ),
+            'document' => array(
+                'type' => 'varchar',
+                'not null' => TRUE,
+                'length' => 50,
+                'default' => '',
+            ),
+            'email' => array(
+                'type' => 'varchar',
+                'not null' => TRUE,
+                'length' => 100,
+                'default' => '',
+            ),
+            'phone' => array(
+                'type' => 'varchar',
+                'not null' => TRUE,
+                'length' => 50,
+                'default' => '',
+            ),
+            'country' => array(
+                'type' => 'varchar',
+                'not null' => TRUE,
+                'length' => 50,
+                'default' => '',
+            ),
+        ),
+        'primary key' => array('vid'),
+    );
+
+    return $schema;
+ }
+
+ /**
+ * Implement Install()
+ */
+ function test_module_install() {
+    
+    $documentTypes = ['Cédula', 'Tarjeta de Identidad'];
+    installVocabulary('test_module_lstdocument_type', 'lstdocument_type', $documentTypes);
+
+    $countries = ['Argentina', 'Bolivia', 'Chile', 'Colombia', 'Ecuador', 'México'];
+    installVocabulary('test_module_lstcountry', 'lstcountry', $countries);
+
+ }
+
+ function installVocabulary($vid, $name, $terms) {
+
+    $vocabularies = \Drupal\taxonomy\Entity\Vocabulary::loadMultiple();
+
+    if (!isset($vocabularies[$vid])) {
+        $vocabulary = \Drupal\taxonomy\Entity\Vocabulary::create(array(
+            'vid' => $vid,
+            'description' => '',
+            'name' => $name,
+        ))->save();
+    
+        foreach ($terms as $term) {
+            $term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->create([
+                'name' => $term,
+                'vid' => $vid,
+            ])->save();
+        }
+    }
+    else {
+        \Drupal::messenger()->addMessage($name . ' vocabulary alredy exits');
+    }
+    
+ }

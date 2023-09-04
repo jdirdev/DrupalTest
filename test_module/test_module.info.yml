@@ -1,0 +1,8 @@
+name: Test Module
+description: 'Test Module'
+
+type: module
+core_version_requirement: '^9.2 || ^10.0'
+version: '1.1.0'
+dependencies:
+  - drupal:taxonomy

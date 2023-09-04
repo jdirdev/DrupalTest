@@ -1,0 +1,15 @@
+custom_form.form:
+  path: '/test/formulario'
+  defaults:
+    _form: 'Drupal\test_module\Form\TestForm'
+    _title: 'Formulario'
+  requirements:
+    _permission: 'access content'
+
+custom_form.form2:
+  path: '/test/formulario/data'
+  defaults:
+    _controller: 'Drupal\test_module\Controller\TestController::students'
+    _title: 'Data'
+  requirements:
+    _permission: 'access content'
